@@ -1,6 +1,5 @@
 package com.angelogalvao.samples.artemis;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.apache.activemq.artemis.api.core.Message;
 import org.apache.activemq.artemis.core.postoffice.RoutingStatus;
 import org.apache.activemq.artemis.core.server.MessageReference;
@@ -11,7 +10,10 @@ import org.apache.activemq.artemis.core.server.plugin.ActiveMQServerPlugin;
 import org.apache.activemq.artemis.core.transaction.Transaction;
 import org.jboss.logging.Logger;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * My custom broker plugin implementation. It only prints the message flowing in and out the broker.
@@ -24,8 +26,6 @@ public class MyBrokerPlugin implements ActiveMQServerPlugin {
 
     // In Java 9 this is significantly simpler
     private Set<String> blackList = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("activemq.", "notif")));
-
-    private Map<Long,String> cache = Collections.synchronizedMap(new HashMap<>());
 
     @Override
     public void afterMessageRoute(Message message, RoutingContext context, boolean direct, boolean rejectDuplicates, RoutingStatus result) {
