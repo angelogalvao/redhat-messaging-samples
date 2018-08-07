@@ -2,8 +2,6 @@
 
 This example logs the message flowing IN and OUT the broker.
 
-There is a gotcha to get the order of the messages corretly in a Artemis cluster. 
-
 Use it as a reference for your own implementation.
 
 ## How to deploy it

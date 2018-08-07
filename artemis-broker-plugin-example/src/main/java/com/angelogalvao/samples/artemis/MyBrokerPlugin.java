@@ -3,7 +3,6 @@ package com.angelogalvao.samples.artemis;
 import org.apache.activemq.artemis.api.core.Message;
 import org.apache.activemq.artemis.core.postoffice.RoutingStatus;
 import org.apache.activemq.artemis.core.server.MessageReference;
-import org.apache.activemq.artemis.core.server.RoutingContext;
 import org.apache.activemq.artemis.core.server.ServerConsumer;
 import org.apache.activemq.artemis.core.server.ServerSession;
 import org.apache.activemq.artemis.core.server.plugin.ActiveMQServerPlugin;
@@ -27,29 +26,6 @@ public class MyBrokerPlugin implements ActiveMQServerPlugin {
     // In Java 9 this is significantly simpler
     private Set<String> blackList = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("activemq.", "notif")));
 
-    @Override
-    public void afterMessageRoute(Message message, RoutingContext context, boolean direct, boolean rejectDuplicates, RoutingStatus result) {
-
-        // skip the messages that it is in black list, like activemq.notifications
-        if (isFromBlacklistAddress(message)) return;
-
-        message.putBooleanProperty("_MyCustomBrokerPlugin_MessageWasRouted", true);
-
-    }
-
-    @Override
-    public void beforeSend(ServerSession session, Transaction tx, Message message, boolean direct, boolean noAutoCreateQueue) {
-        if (isFromBlacklistAddress(message)) return;
-
-        // it's a new message arriving to broker cluster
-        if(message.getMessageID() == 0)
-            message.putBooleanProperty("_MyCustomBrokerPlugin_isNewMessage", true);
-        else
-            message.putBooleanProperty("_MyCustomBrokerPlugin_isNewMessage", false);
-
-    }
-
-
 
     @Override
     public void afterSend(ServerSession session, Transaction tx, Message message, boolean direct, boolean noAutoCreateQueue, RoutingStatus result) {
@@ -58,10 +34,6 @@ public class MyBrokerPlugin implements ActiveMQServerPlugin {
         if (isFromBlacklistAddress(message)) return;
 
         log.info(String.format("MyBrokerPlugin.afterSend: Message getting IN of the broker. Message: %s", message));
-
-        // delaying the route message for consistency logging.
-        if( message.getBooleanProperty("_MyCustomBrokerPlugin_MessageWasRouted") &&  message.getBooleanProperty("_MyCustomBrokerPlugin_isNewMessage")    )
-            log.info(String.format("MyBrokerPlugin.afterSend: Message getting OUT of the broker. Message: %s", message));
 
     }
 
