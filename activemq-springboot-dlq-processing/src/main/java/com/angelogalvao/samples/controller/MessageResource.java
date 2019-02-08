@@ -20,6 +20,7 @@ public class MessageResource {
 		
 		String message = "This is a test message: ActiveMQ + Spring Boot";
 		
+		jmsTemplate.setPubSubDomain(true);
 		jmsTemplate.convertAndSend(destination, message);
 		
 	
