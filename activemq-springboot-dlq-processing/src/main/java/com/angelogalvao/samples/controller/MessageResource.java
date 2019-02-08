@@ -12,7 +12,7 @@ public class MessageResource {
 	@Autowired
     private JmsTemplate jmsTemplate;
 
-    @Value("${test.destination}")
+    @Value("${test.destination.producer}")
     private String destination;
 	
 	@RequestMapping("/runDLQTest")
