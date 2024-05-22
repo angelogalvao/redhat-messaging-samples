@@ -26,7 +26,7 @@ class SendHandler(MessagingHandler):
         print(" on_start.")
 
         # To connect with a user and password:
-        conn = event.container.connect(self.conn_url, user="admin", password="admin")
+        conn = event.container.connect(self.conn_url, user="admin", password="admin", sasl_enabled=False)
         print("create_sender")
         event.container.create_sender(conn, self.address)
         print("create_sender finish")
