@@ -8,6 +8,7 @@ from proton.reactor import Container
 
 class SendHandler(MessagingHandler):
     def __init__(self, conn_url, address, message_body):
+        print("Init 0.")
         super(SendHandler, self).__init__()
 
         print("Init.")
@@ -50,6 +51,7 @@ def main():
     except ValueError:
         sys.exit("Usage: send.py <connection-url> <address> <message-body>")
 
+    print(sys.argv)
     handler = SendHandler(conn_url, address, message_body)
     container = Container(handler)
     container.run()
