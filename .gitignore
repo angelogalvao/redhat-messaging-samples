@@ -62,3 +62,5 @@ MANIFEST.MF
 
 .pmd
 microservice
+.camel-jbang/
+.DS_Store
