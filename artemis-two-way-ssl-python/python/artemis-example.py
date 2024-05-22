@@ -31,12 +31,14 @@ class SendHandler(MessagingHandler):
         conn = event.container.connect(self.conn_url, user="admin", password="admin")
         print("create_sender")
         event.container.create_sender(conn, self.address)
+        print("create_sender finish")
 
     def on_link_opened(self, event):
         print("SEND: Opened sender for target address '{0}'".format
               (event.sender.target.address))
 
     def on_sendable(self, event):
+        print("on_sendable")
         message = Message(self.message_body)
         event.sender.send(message)
 
