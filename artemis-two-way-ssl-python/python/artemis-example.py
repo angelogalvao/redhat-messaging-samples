@@ -10,6 +10,8 @@ class SendHandler(MessagingHandler):
     def __init__(self, conn_url, address, message_body):
         super(SendHandler, self).__init__()
 
+        print("Init.")
+
         self.conn_url = conn_url
         self.address = address
 
@@ -19,11 +21,14 @@ class SendHandler(MessagingHandler):
             self.message_body = message_body
 
     def on_start(self, event):
+
+        print(" on_start.")
+
         conn = event.container.connect(self.conn_url)
 
         # To connect with a user and password:
         # conn = event.container.connect(self.conn_url, user="<user>", password="<password>")
-
+        print("create_sender")
         event.container.create_sender(conn, self.address)
 
     def on_link_opened(self, event):
