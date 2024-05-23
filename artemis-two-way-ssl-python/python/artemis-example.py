@@ -25,8 +25,14 @@ class SendHandler(MessagingHandler):
 
         print(" on_start.")
 
+        self.client_domain = SSLDomain(SSLDomain.MODE_CLIENT)
+
+        self.client_domain.set_credentials("../certificates/client-cert.pem", "../certificates/client-key.pem")
+        self.client_domain.set_trusted_ca_db("../certificates/ca.pem")
+        self.client_domain.set_peer_authentication(SSLDomain.VERIFY_PEER_NAME)
+
         # To connect with a user and password:
-        conn = event.container.connect(self.conn_url, user="admin", password="admin", sasl_enabled=False)
+        conn = event.container.connect(self.conn_url, user="admin", password="admin", sasl_enabled=False,ssl_domain=self.client_domain)
         print("create_sender")
         event.container.create_sender(conn, self.address)
         print("create_sender finish")
