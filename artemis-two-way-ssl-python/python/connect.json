@@ -1,4 +1,12 @@
 {
+    "scheme": "amqps",
+    "host": "localhost",
+    "port": "61617",
+    "user": "admin",
+    "password": "admin",
+    "sasl": {
+        "mechanisms": ["SCRAM-SHA-1", "SCRAM-SHA-256"]
+    },
     "tls": {
         "cert": "../certificates/client-cert.pem",
         "key": "../certificates/client-key.pem",

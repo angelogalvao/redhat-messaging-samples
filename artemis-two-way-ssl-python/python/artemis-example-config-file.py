@@ -2,15 +2,14 @@
 
 import sys
 
-from proton import Message, SSLDomain
+from proton import Message
 from proton.handlers import MessagingHandler
 from proton.reactor import Container
 
 class SendHandler(MessagingHandler):
-    def __init__(self, conn_url, address, message_body):
+    def __init__(self, address, message_body):
         super(SendHandler, self).__init__()
 
-        self.conn_url = conn_url
         self.address = address
 
         try:
@@ -20,14 +19,8 @@ class SendHandler(MessagingHandler):
 
     def on_start(self, event):
 
-        self.client_domain = SSLDomain(SSLDomain.MODE_CLIENT)
-
-        self.client_domain.set_credentials("../certificates/client-cert.pem", "../certificates/client-key.pem", "")
-        self.client_domain.set_trusted_ca_db("../certificates/ca.pem")
-        self.client_domain.set_peer_authentication(SSLDomain.VERIFY_PEER_NAME)
-
-        # To connect with a user and password:
-        conn = event.container.connect(self.conn_url, user="admin", password="admin", sasl_enabled=False, reconnect=False, ssl_domain=self.client_domain)
+        # To connect using config file
+        conn = event.container.connect()
         event.container.create_sender(conn, self.address)
 
     def on_link_opened(self, event):
@@ -45,12 +38,12 @@ class SendHandler(MessagingHandler):
 
 def main():
     try:
-        conn_url, address, message_body = sys.argv[1:4]
+        conn_url, address, message_body = sys.argv[1:3]
     except ValueError:
-        sys.exit("Usage: artemis-example.py <connection-url> <address> <message-body>")
+        sys.exit("Usage: artemis-example-config-file.py <address> <message-body>")
 
     print(sys.argv)
-    handler = SendHandler(conn_url, address, message_body)
+    handler = SendHandler(address, message_body)
     container = Container(handler)
     container.run()
 
