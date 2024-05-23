@@ -49,7 +49,6 @@ def main():
     except ValueError:
         sys.exit("Usage: artemis-example.py <connection-url> <address> <message-body>")
 
-    print(sys.argv)
     handler = SendHandler(conn_url, address, message_body)
     container = Container(handler)
     container.run()

@@ -42,7 +42,6 @@ def main():
     except ValueError:
         sys.exit("Usage: artemis-example-config-file.py <address> <message-body>")
 
-    print(sys.argv)
     handler = SendHandler(address, message_body)
     container = Container(handler)
     container.run()
