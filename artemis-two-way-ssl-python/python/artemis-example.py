@@ -8,10 +8,7 @@ from proton.reactor import Container
 
 class SendHandler(MessagingHandler):
     def __init__(self, conn_url, address, message_body):
-        print("Init 0.")
         super(SendHandler, self).__init__()
-
-        print("Init.")
 
         self.conn_url = conn_url
         self.address = address
@@ -23,8 +20,6 @@ class SendHandler(MessagingHandler):
 
     def on_start(self, event):
 
-        print(" on_start.")
-
         self.client_domain = SSLDomain(SSLDomain.MODE_CLIENT)
 
         self.client_domain.set_credentials("../certificates/client-cert.pem", "../certificates/client-key.pem", "")
@@ -33,16 +28,13 @@ class SendHandler(MessagingHandler):
 
         # To connect with a user and password:
         conn = event.container.connect(self.conn_url, user="admin", password="admin", sasl_enabled=False, reconnect=False, ssl_domain=self.client_domain)
-        print("create_sender")
         event.container.create_sender(conn, self.address)
-        print("create_sender finish")
 
     def on_link_opened(self, event):
         print("SEND: Opened sender for target address '{0}'".format
               (event.sender.target.address))
 
     def on_sendable(self, event):
-        print("on_sendable")
         message = Message(self.message_body)
         event.sender.send(message)
 

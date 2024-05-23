@@ -18,30 +18,13 @@ keytool -import -alias python-client-cert -keystore truststore-server.jks -file 
 // Create the client CA (truststore)
 openssl x509 -in server.crt -out ca.pem -outform PEM
 
-
-## 
-
-keytool -genkeypair -alias broker -keyalg RSA -keysize 2048 -storetype JKS -keystore keystore-server.jks -validity 3650 -ext SAN=dns:localhost,ip:127.0.0.1
-keytool -genkeypair -alias client -keyalg RSA -keysize 2048 -storetype JKS -keystore client.jks -validity 3650 -ext SAN=dns:localhost,ip:127.0.0.1
-
-keytool -export -alias broker -file server.crt -keystore server.jks
-keytool -export -alias client -file client.crt -keystore client.jks
-
-keytool -import -alias server -file server.crt -keystore client.jks
-keytool -import -alias client -file client.crt -keystore server.jks
-
-## Convert the keystore to pem
-
-keytool -importkeystore -srckeystore client.jks -destkeystore client.p12 -srcstoretype jks -deststoretype pkcs12
-openssl pkcs12 -in client.p12 -out client.pem
-
-keytool -importkeystore -srckeystore server.jks -destkeystore server.p12 -srcstoretype jks -deststoretype pkcs12
-openssl pkcs12 -in server.p12 -out server.pem
-
-## Create the cert/key for the Phyton applciation
-
-openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout client-key.pem -out client-cert.pem
-openssl x509 -outform der -in client-cert.pem -out client-cert.der
-keytool -import -alias your-alias -keystore cacerts -file client-cert.der
+## Configure a acceptor in the broker side.
 
 
+Add the following acceptor in broker.xml. Don't forget to change the path to the correct path to keystore and truststore
+
+<acceptor name="artemis-2-way-tls">tcp://0.0.0.0:61617?sslEnabled=true;keyStorePath=/path/to/keystore-server.jks;keyStorePassword=passwd;needClientAuth=true;trustStorePath=/path/to/truststore-server.jks;trustStorePassword=passwd</acceptor>
+
+## Run the application
+
+./artemis-example.py amqps://localhost:61617 testQueue "Test Message"
