@@ -2,7 +2,7 @@
 
 import sys
 
-from proton import Message
+from proton import Message, SSLDomain
 from proton.handlers import MessagingHandler
 from proton.reactor import Container
 
