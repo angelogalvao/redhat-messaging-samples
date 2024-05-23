@@ -38,7 +38,7 @@ class SendHandler(MessagingHandler):
 
 def main():
     try:
-        conn_url, address, message_body = sys.argv[1:3]
+        address, message_body = sys.argv[1:3]
     except ValueError:
         sys.exit("Usage: artemis-example-config-file.py <address> <message-body>")
 
