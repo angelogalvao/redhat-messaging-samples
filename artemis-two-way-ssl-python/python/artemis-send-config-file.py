@@ -24,8 +24,7 @@ class SendHandler(MessagingHandler):
         event.container.create_sender(conn, self.address)
 
     def on_link_opened(self, event):
-        print("SEND: Opened sender for target address '{0}'".format
-              (event.sender.target.address))
+        print("SEND: Opened sender for target address '{0}'".format(event.sender.target.address))
 
     def on_sendable(self, event):
         message = Message(self.message_body)
@@ -40,7 +39,7 @@ def main():
     try:
         address, message_body = sys.argv[1:3]
     except ValueError:
-        sys.exit("Usage: artemis-example-config-file.py <address> <message-body>")
+        sys.exit("Usage: artemis-send-config-file.py <address> <message-body>")
 
     handler = SendHandler(address, message_body)
     container = Container(handler)

@@ -34,6 +34,12 @@ openssl x509 -in server.crt -out ca.pem -outform PEM
 
 ## Run the application
 
+- Execute the application where the configuration is on the code:
 ```sh
-./artemis-example.py amqps://localhost:61617 testQueue "Test Message"
+./artemis-send.py amqps://localhost:61617 testQueue "Test Message"
+```
+
+- Execute the application where the configuration is on the file:
+```sh
+./artemis-send-config-file.py testQueue "Test Message"
 ```

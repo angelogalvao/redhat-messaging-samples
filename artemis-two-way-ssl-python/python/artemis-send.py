@@ -24,15 +24,14 @@ class SendHandler(MessagingHandler):
 
         self.client_domain.set_credentials("../certificates/client-cert.pem", "../certificates/client-key.pem", "")
         self.client_domain.set_trusted_ca_db("../certificates/ca.pem")
-        self.client_domain.set_peer_authentication(SSLDomain.VERIFY_PEER_NAME)
+        self.client_domain.set_peer_authentication(SSLDomain.ANONYMOUS_PEER)
 
         # To connect with a user and password:
         conn = event.container.connect(self.conn_url, user="admin", password="admin", sasl_enabled=False, reconnect=False, ssl_domain=self.client_domain)
         event.container.create_sender(conn, self.address)
 
     def on_link_opened(self, event):
-        print("SEND: Opened sender for target address '{0}'".format
-              (event.sender.target.address))
+        print("SEND: Opened sender for target address '{0}'".format(event.sender.target.address))
 
     def on_sendable(self, event):
         message = Message(self.message_body)
@@ -47,7 +46,7 @@ def main():
     try:
         conn_url, address, message_body = sys.argv[1:4]
     except ValueError:
-        sys.exit("Usage: artemis-example.py <connection-url> <address> <message-body>")
+        sys.exit("Usage: artemis-send.py <connection-url> <address> <message-body>")
 
     handler = SendHandler(conn_url, address, message_body)
     container = Container(handler)
