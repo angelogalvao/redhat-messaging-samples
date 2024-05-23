@@ -32,7 +32,7 @@ class SendHandler(MessagingHandler):
         self.client_domain.set_peer_authentication(SSLDomain.VERIFY_PEER_NAME)
 
         # To connect with a user and password:
-        conn = event.container.connect(self.conn_url, user="admin", password="admin", sasl_enabled=False,ssl_domain=self.client_domain)
+        conn = event.container.connect(self.conn_url, user="admin", password="admin", sasl_enabled=False, reconnect=False, ssl_domain=self.client_domain)
         print("create_sender")
         event.container.create_sender(conn, self.address)
         print("create_sender finish")
