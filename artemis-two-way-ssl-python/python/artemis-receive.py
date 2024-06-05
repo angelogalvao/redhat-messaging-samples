@@ -4,6 +4,7 @@ import sys
 
 from proton.handlers import MessagingHandler
 from proton.reactor import Container
+from proton import SSLDomain
 
 class ReceiveHandler(MessagingHandler):
     def __init__(self, conn_url, address, desired):
