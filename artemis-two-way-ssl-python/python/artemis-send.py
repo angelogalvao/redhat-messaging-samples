@@ -27,7 +27,7 @@ class SendHandler(MessagingHandler):
         self.client_domain.set_peer_authentication(SSLDomain.ANONYMOUS_PEER)
 
         # To connect with a user and password:
-        conn = event.container.connect(self.conn_url, user="admin", password="admin", sasl_enabled=False, reconnect=False, ssl_domain=self.client_domain)
+        conn = event.container.connect(self.conn_url, reconnect=False, ssl_domain=self.client_domain)
         event.container.create_sender(conn, self.address)
 
     def on_link_opened(self, event):
