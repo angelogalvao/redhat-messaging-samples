@@ -3,7 +3,7 @@
 import sys
 #import logging
 
-from proton import Message
+from proton import Message, SSLDomain
 from proton.handlers import MessagingHandler
 from proton.reactor import Container
 
@@ -22,16 +22,19 @@ class SendHandler(MessagingHandler):
 
     def on_start(self, event):
 
+        print("Configuring SSL")
         self.client_domain = SSLDomain(SSLDomain.MODE_CLIENT)
 
         self.client_domain.set_credentials("certificates/client-cert.pem", "certificates/client-key.pem", "")
         self.client_domain.set_trusted_ca_db("certificates/ca.pem")
         self.client_domain.set_peer_authentication(SSLDomain.ANONYMOUS_PEER)
 
+        print("Configuring SSL Done!")
+
         # To connect with a user and password:
         print("Connecting to the broker")
         conn = event.container.connect(self.conn_url, reconnect=False, ssl_domain=self.client_domain)
-        print("Connection done")
+        print("Connecting to the broker done!")
 
         # To connect using config file
         # conn = event.container.connect()
