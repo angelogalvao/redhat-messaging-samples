@@ -9,9 +9,10 @@ from proton.reactor import Container
 
 
 class SendHandler(MessagingHandler):
-    def __init__(self, address, message_body):
+    def __init__(self, conn_url, address, message_body):
         super(SendHandler, self).__init__()
 
+        self.conn_url = conn_url
         self.address = address
 
         try:
@@ -21,8 +22,19 @@ class SendHandler(MessagingHandler):
 
     def on_start(self, event):
 
+        self.client_domain = SSLDomain(SSLDomain.MODE_CLIENT)
+
+        self.client_domain.set_credentials("certificates/client-cert.pem", "certificates/client-key.pem", "")
+        self.client_domain.set_trusted_ca_db("certificates/ca.pem")
+        self.client_domain.set_peer_authentication(SSLDomain.ANONYMOUS_PEER)
+
+        # To connect with a user and password:
+        print("Connecting to the broker")
+        conn = event.container.connect(self.conn_url, reconnect=False, ssl_domain=self.client_domain)
+        print("Connection done")
+
         # To connect using config file
-        conn = event.container.connect()
+        # conn = event.container.connect()
         event.container.create_sender(conn, self.address)
 
     def on_link_opened(self, event):
@@ -46,8 +58,9 @@ def main():
     print("Starting the application that sends a simple message to the AMQ Broker!")
     address = "test"
     message_body = "Test Message"
+    conn_url = "amqps://192.168.0.3:61617"
 
-    handler = SendHandler(address, message_body)
+    handler = SendHandler(conn_url, address, message_body)
     container = Container(handler)
     container.run()
 
