@@ -43,6 +43,7 @@ openssl x509 -in server.crt -out ca.pem -outform PEM
 ## Configure the queue
 
 - Add the folowing queues in broker.xml
+
 ```xml
     <address name="test">
         <anycast>
@@ -54,29 +55,34 @@ openssl x509 -in server.crt -out ca.pem -outform PEM
             <queue name="TEST-A" />
         </multicast>
     </address>
+```
 
 ## Configure the Certificate based authentication/authorization
 
 - Add the user in artemis-users-properties file (example):
+
 ```
 python-app=EMAILADDRESS=asouza@redhat.com, CN=Python Application, OU=CEE, O=Red Hat Inc., L=Raleigh, ST=NC, C=US
 ```
 
 - Add the role to that user in artemis-roles-properties file:
+
 ```
 test = python-app
 ```
 
 - Configure new TextFileCertificateLoginModule in login.config file:
+
 ```
     org.apache.activemq.artemis.spi.core.security.jaas.TextFileCertificateLoginModule sufficient
        debug=true
        org.apache.activemq.jaas.textfiledn.user="artemis-users.properties"
        org.apache.activemq.jaas.textfiledn.role="artemis-roles.properties";
 ```
-- Also set the PropertiesLoginModule to sufficient 
 
+- Also set the PropertiesLoginModule to sufficient
 - Set the new security settings in the broker.xml file:
+
 ```xml
 <security-setting match="test">
     <permission type="createNonDurableQueue" roles="test"/>
@@ -103,25 +109,27 @@ test = python-app
 ## Run the application on Linux
 
 - Install QPID Proton module:
+
 ```sh
  sudo yum install python3-qpid-proton python-qpid-proton-docs
- ```
+```
 
 - Execute the application where the configuration is on the code:
 
 ```sh
-./artemis-send.py amqps://localhost:61617 testQueue "Test Message"
+./qpid-sender.py amqps://localhost:61617 testQueue "Test Message"
 ```
 
 - Execute the application where the configuration is on the file:
 
 ```sh
-./artemis-send-config-file.py testQueue "Test Message"
+./qpid-sender-config-file.py testQueue "Test Message"
 ```
 
 ## Run the application on MacOS
 
 - Install the virtual env to install QPID Proton module:
+
 ```sh
 python3 -m venv .venv
 source .venv/bin/activate
@@ -129,9 +137,10 @@ python3 -m pip install python-qpid-proton
 python3 -m pip install flask
 ```
 
-- Run the application 
+- Run the application
+
 ```sh
-python3 artemis-send.py amqps://localhost:61617 testQueue "Test Message"
+python3 qpid-sender.py amqps://localhost:61617 testQueue "Test Message"
 ```
 
 ## Run the application on Openshift
@@ -139,5 +148,21 @@ python3 artemis-send.py amqps://localhost:61617 testQueue "Test Message"
 - Create the Openshift Project
 
 ```sh
-oc new-project python-artemis-client-project
+oc new-project python-artemis-client-project 
+```
+
+- Deplot the app:
+
+```sh
+oc new-app --context-dir='artemis-2-way-tls-certificate-authentication-qpid-python'
+```
+
+*That deploy just enable a simple web server that do nothing! This is just an example in how to use s2i on a Python project*
+
+- Login to the pod and call the application:
+
+```sh
+oc rsh <pod>
+
+python3 qpid-sender.py amqps://IPorService:61617 testQueue "Test Message"
 ```
