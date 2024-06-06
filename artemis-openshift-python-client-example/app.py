@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import sys
-import logging
+#import logging
 
 from proton import Message
 from proton.handlers import MessagingHandler
@@ -43,7 +43,7 @@ def main():
     # except ValueError:
     #     sys.exit("Usage: artemis-send-config-file.py <address> <message-body>")
 
-    info("Starting the application that sends a simple message to the AMQ Broker!")
+    print("Starting the application that sends a simple message to the AMQ Broker!")
     address = "test"
     message_body = "Test Message"
 
@@ -51,7 +51,7 @@ def main():
     container = Container(handler)
     container.run()
 
-    info("Initialization done!")
+    print("Initialization done!")
 
 if __name__ == "__main__":
     try:
