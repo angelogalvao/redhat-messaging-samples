@@ -1,1 +1,0 @@
-python-qpid-proton==0.37.0

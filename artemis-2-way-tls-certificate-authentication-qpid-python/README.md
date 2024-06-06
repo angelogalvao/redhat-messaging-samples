@@ -126,6 +126,7 @@ test = python-app
 python3 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install python-qpid-proton
+python3 -m pip install flask
 ```
 
 - Run the application 
