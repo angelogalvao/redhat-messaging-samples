@@ -1,6 +1,6 @@
 {
     "scheme": "amqps",
-    "host": "localhost",
+    "host": "192.168.0.3",
     "port": "61617",
     "tls": {
         "cert": "certificates/client-cert.pem",
