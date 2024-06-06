@@ -64,3 +64,4 @@ MANIFEST.MF
 microservice
 .camel-jbang/
 .DS_Store
+.venv/

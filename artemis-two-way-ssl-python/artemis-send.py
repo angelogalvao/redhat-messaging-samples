@@ -22,8 +22,8 @@ class SendHandler(MessagingHandler):
 
         self.client_domain = SSLDomain(SSLDomain.MODE_CLIENT)
 
-        self.client_domain.set_credentials("../certificates/client-cert.pem", "../certificates/client-key.pem", "")
-        self.client_domain.set_trusted_ca_db("../certificates/ca.pem")
+        self.client_domain.set_credentials("certificates/client-cert.pem", "certificates/client-key.pem", "")
+        self.client_domain.set_trusted_ca_db("certificates/ca.pem")
         self.client_domain.set_peer_authentication(SSLDomain.ANONYMOUS_PEER)
 
         # To connect with a user and password:

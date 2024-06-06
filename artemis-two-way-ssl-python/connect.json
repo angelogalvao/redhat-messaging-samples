@@ -5,9 +5,9 @@
     "user": "admin",
     "password": "admin",
     "tls": {
-        "cert": "../certificates/client-cert.pem",
-        "key": "../certificates/client-key.pem",
-        "ca": "../certificates/ca.pem",
+        "cert": "certificates/client-cert.pem",
+        "key": "certificates/client-key.pem",
+        "ca": "certificates/ca.pem",
         "verify": "False"
     }
 }

@@ -1,6 +1,6 @@
 # Two way TLS with AMQ Broker
 
-# Configure the broker keystore
+## Configure the broker keystore
 
 ```sh
 export PASSWORD=passwd
@@ -40,7 +40,58 @@ openssl x509 -in server.crt -out ca.pem -outform PEM
 <acceptor name="artemis-2-way-tls">tcp://0.0.0.0:61617?sslEnabled=true;keyStorePath=/path/to/keystore-server.jks;keyStorePassword=passwd;needClientAuth=true;trustStorePath=/path/to/truststore-server.jks;trustStorePassword=passwd</acceptor>
 ```
 
-## Run the application
+## Configure the queue
+
+- Add the folowing queue in broker.xml
+```xml
+    <address name="test">
+        <anycast>
+            <queue name="test" />
+        </anycast>
+    </address>
+```
+
+## Configure the Certificate based authentication/authorization
+
+- Add the user in artemis-users-properties file (example):
+```
+python-app=EMAILADDRESS=asouza@redhat.com, CN=Python Application, OU=CEE, O=Red Hat Inc., L=Raleigh, ST=NC, C=US
+```
+
+- Add the role to that user in artemis-roles-properties file:
+```
+test = python-app
+```
+
+- Configure new TextFileCertificateLoginModule in login.config file:
+```
+    org.apache.activemq.artemis.spi.core.security.jaas.TextFileCertificateLoginModule sufficient
+       debug=true
+       org.apache.activemq.jaas.textfiledn.user="artemis-users.properties"
+       org.apache.activemq.jaas.textfiledn.role="artemis-roles.properties";
+```
+- Also set the PropertiesLoginModule to sufficient 
+
+- Set the new security settings in the broker.xml file:
+```xml
+<security-setting match="test">
+    <permission type="createNonDurableQueue" roles="test"/>
+    <permission type="deleteNonDurableQueue" roles="test"/>
+    <permission type="createAddress" roles="test"/>
+    <permission type="deleteAddress" roles="test"/>
+    <permission type="consume" roles="test"/>
+    <permission type="send"    roles="test"/>
+    <permission type="browse"  roles="test"/>
+    <permission type="manage"  roles="test"/>
+</security-setting>
+```
+
+## Run the application on Linux
+
+- Install QPID Proton module:
+```sh
+ sudo yum install python3-qpid-proton python-qpid-proton-docs
+ ```
 
 - Execute the application where the configuration is on the code:
 
@@ -52,6 +103,20 @@ openssl x509 -in server.crt -out ca.pem -outform PEM
 
 ```sh
 ./artemis-send-config-file.py testQueue "Test Message"
+```
+
+## Run the application on MacOS
+
+- Install the virtual env to install QPID Proton module:
+```sh
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install python-qpid-proton
+```
+
+- Run the application 
+```sh
+python3 artemis-send.py amqps://localhost:61617 testQueue "Test Message"
 ```
 
 ## Run the application on Openshift
