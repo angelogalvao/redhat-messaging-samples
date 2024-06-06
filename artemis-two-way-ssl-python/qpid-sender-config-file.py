@@ -39,7 +39,7 @@ def main():
     try:
         address, message_body = sys.argv[1:3]
     except ValueError:
-        sys.exit("Usage: artemis-send-config-file.py <address> <message-body>")
+        sys.exit("Usage: qpid-sender-config-file.py <address> <message-body>")
 
     handler = SendHandler(address, message_body)
     container = Container(handler)

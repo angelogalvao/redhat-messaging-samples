@@ -2,8 +2,8 @@
     "scheme": "amqps",
     "host": "localhost",
     "port": "61617",
-    "user": "admin",
-    "password": "admin",
+    "user": "---",
+    "password": "---",
     "tls": {
         "cert": "certificates/client-cert.pem",
         "key": "certificates/client-key.pem",

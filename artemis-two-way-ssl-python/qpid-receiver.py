@@ -48,7 +48,7 @@ def main():
     try:
         conn_url, address = sys.argv[1:3]
     except ValueError:
-        sys.exit("Usage: receive.py <connection-url> <address> [<message-count>]")
+        sys.exit("Usage: qpid-receiver.py <connection-url> <address> [<message-count>]")
 
     try:
         desired = int(sys.argv[3])

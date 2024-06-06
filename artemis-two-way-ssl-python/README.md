@@ -42,14 +42,18 @@ openssl x509 -in server.crt -out ca.pem -outform PEM
 
 ## Configure the queue
 
-- Add the folowing queue in broker.xml
+- Add the folowing queues in broker.xml
 ```xml
     <address name="test">
         <anycast>
             <queue name="test" />
         </anycast>
     </address>
-```
+    <address name="TEST-M">
+        <multicast>
+            <queue name="TEST-A" />
+        </multicast>
+    </address>
 
 ## Configure the Certificate based authentication/authorization
 
@@ -75,6 +79,16 @@ test = python-app
 - Set the new security settings in the broker.xml file:
 ```xml
 <security-setting match="test">
+    <permission type="createNonDurableQueue" roles="test"/>
+    <permission type="deleteNonDurableQueue" roles="test"/>
+    <permission type="createAddress" roles="test"/>
+    <permission type="deleteAddress" roles="test"/>
+    <permission type="consume" roles="test"/>
+    <permission type="send"    roles="test"/>
+    <permission type="browse"  roles="test"/>
+    <permission type="manage"  roles="test"/>
+</security-setting>
+<security-setting match="TEST-M.#">
     <permission type="createNonDurableQueue" roles="test"/>
     <permission type="deleteNonDurableQueue" roles="test"/>
     <permission type="createAddress" roles="test"/>
