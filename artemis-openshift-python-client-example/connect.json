@@ -1,0 +1,11 @@
+{
+    "scheme": "amqps",
+    "host": "localhost",
+    "port": "61617",
+    "tls": {
+        "cert": "certificates/client-cert.pem",
+        "key": "certificates/client-key.pem",
+        "ca": "certificates/ca.pem",
+        "verify": "False"
+    }
+}

@@ -1,0 +1,2 @@
+python3-qpid-proton 
+python-qpid-proton-docs
