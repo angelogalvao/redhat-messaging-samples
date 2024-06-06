@@ -1,2 +1,2 @@
-python3-qpid-proton 
-python-qpid-proton-docs
+python3-qpid-proton==0.37.0
+python-qpid-proton-docs==0.37.0
